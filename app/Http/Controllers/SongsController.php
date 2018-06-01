@@ -163,12 +163,13 @@ class SongsController extends Controller
 
             $user = User::findOrFail(auth()->user()->id);
 
-            $song = Song::where('id', $song_id)->first();
-            $song->artist = $request->artist;
-            $song->track = $request->track;
-            $song->link = $request->link;
+
 
             if ($user->hasRole('admin')) {
+                $song = Song::where('id', $song_id)->first();
+                $song->artist = $request->artist;
+                $song->track = $request->track;
+                $song->link = $request->link;
                 $song->update();
                 return new SongResource($song);
             }
@@ -176,6 +177,10 @@ class SongsController extends Controller
             if ($user->hasRole('user')) {
                 $song = Song::where('id', $song_id)->first();
                 if ($song->user_id == $user->id) {
+                    $song = Song::where('id', $song_id)->first();
+                    $song->artist = $request->artist;
+                    $song->track = $request->track;
+                    $song->link = $request->link;
                     $song->update();
                     return new SongResource($song);
                 }
